@@ -1,4 +1,5 @@
 from django.db import models
+from rest_framework.exceptions import ValidationError
 
 
 class Book(models.Model):
@@ -15,4 +16,25 @@ class Book(models.Model):
     inventory = models.PositiveIntegerField()
     daily_fee = models.DecimalField(max_digits=5, decimal_places=4)
 
+    def __str__(self):
+        return self.title
 
+    @staticmethod
+    def validate_book(book, error_to_raise):
+        if book.inventory == 0:
+            raise error_to_raise("Book is out of stock")
+
+    def clean(self):
+        Book.validate_book(self, ValidationError)
+
+    def save(
+        self,
+        force_insert=False,
+        force_update=False,
+        using=None,
+        update_fields=None,
+    ):
+        self.full_clean()
+        return super(Book, self).save(
+            force_insert, force_update, using, update_fields
+        )
