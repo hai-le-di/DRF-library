@@ -1,7 +1,10 @@
-from rest_framework import viewsets, mixins
-from rest_framework.permissions import IsAuthenticated
+from datetime import datetime
 
-from books.permissions import AdminWriteOnly
+from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+
 from borrowings.models import Borrowing
 from borrowings.serializers import BorrowingSerializer, BorrowingListSerializer, BorrowingDetailSerializer
 
@@ -13,10 +16,15 @@ class BorrowingViewSet(viewsets.ModelViewSet):
     queryset = Borrowing.objects.select_related("book", "user")
 
     def get_queryset(self):
-        if self.request.query_params.get('is_active'):
-            return Borrowing.objects.filter(user=self.request.user, is_active=True)
+        user = self.request.user
+        user_id = self.request.query_params.get("user_id", None)
+
+        if user.is_staff and user_id:
+            return Borrowing.objects.filter(user_id=user_id)
+        elif user.is_staff:
+            return Borrowing.objects.all()
         else:
-            return Borrowing.objects.filter(user=self.request.user)
+            return Borrowing.objects.filter(user=user)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -29,3 +37,16 @@ class BorrowingViewSet(viewsets.ModelViewSet):
             return BorrowingDetailSerializer
 
         return BorrowingSerializer
+
+    @action(detail=True, methods=['post'])
+    def return_borrowing(self, request, pk=None):
+        borrowing = self.get_object()
+        if not borrowing.is_active:
+            return Response({'message': 'Borrowing has already been returned.'}, status=400)
+        borrowing.is_active = False
+        borrowing.actual_return_date = datetime.now()
+        borrowing.save()
+        borrowing.book.quantity += 1
+        borrowing.book.save()
+        serializer = self.get_serializer(borrowing)
+        return Response(serializer.data)
