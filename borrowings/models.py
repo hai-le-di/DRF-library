@@ -31,3 +31,5 @@ class Borrowing(models.Model):
         related_name="borrowings",
         on_delete=models.CASCADE
     )
+    is_active = models.BooleanField(default=True)
+

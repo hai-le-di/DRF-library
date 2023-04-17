@@ -25,7 +25,7 @@ class BorrowingSerializer(serializers.ModelSerializer):
         book.save()
         borrowing = Borrowing.objects.create(
             book=book,
-            user=self.context["request"].user,
+            user=self.request.user,
             borrow_date=timezone.now(),
             expected_return_date=validated_data["expected_return_date"]
         )
