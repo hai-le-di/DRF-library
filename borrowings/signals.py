@@ -11,5 +11,4 @@ def notify_on_borrowing_creation(sender, instance, created, **kwargs):
     Sends a notification when a new borrowing is created.
     """
     if created:
-        print("Borrowing OK")
-        send_borrowing_notification(instance)
+        send_borrowing_notification(instance.id)
