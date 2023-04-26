@@ -12,6 +12,13 @@ class BorrowingSerializer(serializers.ModelSerializer):
         model = Borrowing
         fields = "__all__"
 
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['borrow_date'] = instance.borrow_date.strftime('%Y-%m-%d %H:%M:%S')
+        representation['expected_return_date'] = instance.expected_return_date.strftime('%Y-%m-%d %H:%M:%S')
+        representation['actual_return_date'] = instance.expected_return_date.strftime('%Y-%m-%d %H:%M:%S')
+        return representation
+
     def validate(self, attrs):
         data = super(BorrowingSerializer, self).validate(attrs)
         Book.validate_book(attrs["book"], serializers.ValidationError)
