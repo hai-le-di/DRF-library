@@ -9,10 +9,12 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+from datetime import datetime
 import os
 from pathlib import Path
 import tracemalloc
+
+from celery.schedules import crontab
 from dotenv import load_dotenv
 load_dotenv()
 tracemalloc.start()
@@ -44,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'celery',
+    'django_celery_beat',
     'user',
     'books',
     'borrowings',
@@ -140,17 +143,13 @@ REST_FRAMEWORK = {
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/1",
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        },
-        "KEY_PREFIX": "library",
-    }
-}
+CELERY_BROKER_URL = "redis://localhost:6379/0"
+CELERY_RESULT_BACKEND = "redis://localhost:6379/1"
 
-# Celery
-CELERY_BROKER_URL = "redis://127.0.0.1:6379/2"
-CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/3"
+
+CELERY_BEAT_SCHEDULE = {
+    'send_overdue_notifications_schedule': {
+        'task': 'borrowings.tasks.send_overdue_notifications',
+        'schedule': crontab(hour=0, minute=0),
+    },
+}
