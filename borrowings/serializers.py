@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -11,17 +9,16 @@ from user.serializers import UserSerializer
 
 
 class BorrowingSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Borrowing
         fields = [
-            'id',
-            'borrow_date',
-            'expected_return_date',
-            'actual_return_date',
-            'book',
-            'user',
-            'is_active',
+            "id",
+            "borrow_date",
+            "expected_return_date",
+            "actual_return_date",
+            "book",
+            "user",
+            "is_active",
         ]
 
     def validate(self, attrs):
@@ -38,17 +35,21 @@ class BorrowingSerializer(serializers.ModelSerializer):
             book=book,
             user=self.context["request"].user,
             borrow_date=timezone.now(),
-            expected_return_date=validated_data["expected_return_date"]
+            expected_return_date=validated_data["expected_return_date"],
         )
         return borrowing
 
 
 class BorrowingListSerializer(BorrowingSerializer):
     book = serializers.SlugRelatedField(
-        many=False, read_only=True, slug_field="title"
+        many=False,
+        read_only=True,
+        slug_field="title"
     )
     user = serializers.SlugRelatedField(
-        many=False, read_only=True, slug_field="email"
+        many=False,
+        read_only=True,
+        slug_field="email"
     )
 
 

@@ -5,6 +5,7 @@ from django.utils import timezone
 from .models import Borrowing
 from telegram_helper import bot
 from dotenv import load_dotenv
+
 load_dotenv()
 
 
@@ -25,13 +26,15 @@ def send_overdue_notifications():
     for borrowing in overdue_borrowings:
         book_title = borrowing.book.title
         user_email = borrowing.user.email
-        borrow_date = borrowing.borrow_date.strftime('%Y-%m-%d')
-        expected_return_date = borrowing.expected_return_date.strftime('%Y-%m-%d')
+        borrow_date = borrowing.borrow_date.strftime("%Y-%m-%d")
+        expected_return_date = borrowing.expected_return_date.strftime("%Y-%m-%d")
 
         # Compose the message for the notification
-        message = f'The book "{book_title}" borrowed by {user_email} ' \
-                  f'on {borrow_date} is overdue. Expected return date is ' \
-                  f'{expected_return_date}.'
+        message = (
+            f'The book "{book_title}" borrowed by {user_email} '
+            f"on {borrow_date} is overdue. Expected return date is "
+            f"{expected_return_date}."
+        )
 
         # Send the notification
         bot.send_message(chat_id=chat_id, text=message)

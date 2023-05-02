@@ -8,24 +8,76 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('books', '0001_initial'),
+        ("books", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Borrowing',
+            name="Borrowing",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('borrow_date', models.DateTimeField(help_text='The date when the book was borrowed.', validators=[django.core.validators.MinValueValidator(limit_value=datetime.datetime.now)])),
-                ('expected_return_date', models.DateTimeField(help_text='The date when the book is expected to be returned.', validators=[django.core.validators.MinValueValidator(limit_value=datetime.datetime.now)])),
-                ('actual_return_date', models.DateTimeField(help_text='The date when the book was actually returned.', validators=[django.core.validators.MinValueValidator(limit_value=datetime.datetime.now)])),
-                ('book', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='borrowings', to='books.book')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='borrowings', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "borrow_date",
+                    models.DateTimeField(
+                        help_text="The date when the book was borrowed.",
+                        validators=[
+                            django.core.validators.MinValueValidator(
+                                limit_value=datetime.datetime.now
+                            )
+                        ],
+                    ),
+                ),
+                (
+                    "expected_return_date",
+                    models.DateTimeField(
+                        help_text="The date when the book is expected to be returned.",
+                        validators=[
+                            django.core.validators.MinValueValidator(
+                                limit_value=datetime.datetime.now
+                            )
+                        ],
+                    ),
+                ),
+                (
+                    "actual_return_date",
+                    models.DateTimeField(
+                        help_text="The date when the book was actually returned.",
+                        validators=[
+                            django.core.validators.MinValueValidator(
+                                limit_value=datetime.datetime.now
+                            )
+                        ],
+                    ),
+                ),
+                (
+                    "book",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="borrowings",
+                        to="books.book",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="borrowings",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]

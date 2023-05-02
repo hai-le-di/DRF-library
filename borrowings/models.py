@@ -5,16 +5,15 @@ from user.models import User
 
 class Borrowing(models.Model):
     borrow_date = models.DateField(
-        auto_now_add=True,
-        help_text='The date when the book was borrowed.'
+        auto_now_add=True, help_text="The date when the book was borrowed."
     )
     expected_return_date = models.DateField(
-        help_text='The date when the book is expected to be returned.'
+        help_text="The date when the book is expected to be returned."
     )
     actual_return_date = models.DateField(
         null=True,
         blank=True,
-        help_text='The date when the book was actually returned.'
+        help_text="The date when the book was actually returned."
     )
     book = models.ForeignKey(
         Book,
@@ -36,4 +35,3 @@ class Borrowing(models.Model):
             self.book.inventory += 1
             self.book.save()
         super().save(*args, **kwargs)
-

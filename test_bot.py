@@ -18,7 +18,10 @@ class TestTelegramHelper(TestCase):
 
     @mock.patch.object(TeleBot, "send_message")
     def test_send_borrowing_notification(self, mock_send_message):
-        user = User.objects.create_user(email='testuser@example.com', password='testpass')
+        user = User.objects.create_user(
+            email='testuser@example.com',
+            password='testpass'
+        )
         book = Book.objects.create(
             title='Test Book',
             author='Test Author',

@@ -6,30 +6,47 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('borrowings', '0001_initial'),
+        ("borrowings", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='borrowing',
-            name='is_active',
+            model_name="borrowing",
+            name="is_active",
             field=models.BooleanField(default=True),
         ),
         migrations.AlterField(
-            model_name='borrowing',
-            name='actual_return_date',
-            field=models.DateField(blank=True, help_text='The date when the book was actually returned.', null=True),
+            model_name="borrowing",
+            name="actual_return_date",
+            field=models.DateField(
+                blank=True,
+                help_text="The date when the book was actually returned.",
+                null=True,
+            ),
         ),
         migrations.AlterField(
-            model_name='borrowing',
-            name='borrow_date',
-            field=models.DateField(help_text='The date when the book was borrowed.', validators=[django.core.validators.MinValueValidator(limit_value=datetime.date.today)]),
+            model_name="borrowing",
+            name="borrow_date",
+            field=models.DateField(
+                help_text="The date when the book was borrowed.",
+                validators=[
+                    django.core.validators.MinValueValidator(
+                        limit_value=datetime.date.today
+                    )
+                ],
+            ),
         ),
         migrations.AlterField(
-            model_name='borrowing',
-            name='expected_return_date',
-            field=models.DateField(help_text='The date when the book is expected to be returned.', validators=[django.core.validators.MinValueValidator(limit_value=datetime.date.today)]),
+            model_name="borrowing",
+            name="expected_return_date",
+            field=models.DateField(
+                help_text="The date when the book is expected to be returned.",
+                validators=[
+                    django.core.validators.MinValueValidator(
+                        limit_value=datetime.date.today
+                    )
+                ],
+            ),
         ),
     ]

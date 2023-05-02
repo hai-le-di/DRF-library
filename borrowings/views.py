@@ -5,7 +5,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from borrowings.models import Borrowing
-from borrowings.serializers import BorrowingSerializer, BorrowingListSerializer, BorrowingDetailSerializer
+from borrowings.serializers import (
+    BorrowingSerializer,
+    BorrowingListSerializer,
+    BorrowingDetailSerializer,
+)
 
 
 class BorrowingViewSet(viewsets.ModelViewSet):
@@ -42,15 +46,17 @@ class BorrowingViewSet(viewsets.ModelViewSet):
 
         return BorrowingSerializer
 
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=["post"])
     def return_borrowing(self, request, pk=None):
         borrowing = self.get_object()
         if not borrowing.is_active:
-            return Response({'message': 'Borrowing has already been returned.'}, status=400)
+            return Response(
+                {"message": "Borrowing has already been returned."}, status=400
+            )
         borrowing.is_active = False
         borrowing.actual_return_date = timezone.now().date()
         borrowing.book.inventory += 1
-        borrowing.book.save(update_fields=['inventory'])
-        borrowing.save(update_fields=['is_active', 'actual_return_date'])
+        borrowing.book.save(update_fields=["inventory"])
+        borrowing.save(update_fields=["is_active", "actual_return_date"])
         serializer = self.get_serializer(borrowing)
         return Response(serializer.data)

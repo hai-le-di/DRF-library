@@ -9,9 +9,9 @@ router.register("borrowings", BorrowingViewSet, basename="borrowings")
 urlpatterns = [
     path("", include(router.urls)),
     path(
-        'borrowings/<int:pk>/return_borrowing/',
-        BorrowingViewSet.as_view({'post': 'return_borrowing'}),
-        name='return_borrowing'
+        "borrowings/<int:pk>/return_borrowing/",
+        BorrowingViewSet.as_view({"post": "return_borrowing"}),
+        name="return_borrowing",
     ),
 ]
 
