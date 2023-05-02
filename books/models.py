@@ -21,7 +21,7 @@ class Book(models.Model):
 
     @staticmethod
     def validate_book(book, error_to_raise):
-        if book.inventory == 0:
+        if book.inventory < 0:
             raise error_to_raise("Book is out of stock")
 
     def clean(self):

@@ -22,7 +22,6 @@ class Borrowing(models.Model):
     book = models.ForeignKey(
         Book,
         related_name="borrowings",
-        null=True,
         on_delete=models.CASCADE
     )
     user = models.ForeignKey(
@@ -31,3 +30,10 @@ class Borrowing(models.Model):
         on_delete=models.CASCADE
     )
     is_active = models.BooleanField(default=True)
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.book.inventory -= 1
+            self.book.save()
+
+        super(Borrowing, self).save(*args, **kwargs)

@@ -1,5 +1,6 @@
 from django.utils import timezone
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from books.models import Book
 from books.serializers import BookDetailSerializer
@@ -8,9 +9,18 @@ from user.serializers import UserSerializer
 
 
 class BorrowingSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Borrowing
-        fields = "__all__"
+        fields = [
+            'id',
+            'borrow_date',
+            'expected_return_date',
+            'actual_return_date',
+            'book',
+            'user',
+            'is_active',
+        ]
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
@@ -21,7 +31,7 @@ class BorrowingSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         data = super(BorrowingSerializer, self).validate(attrs)
-        Book.validate_book(attrs["book"], serializers.ValidationError)
+        Book.validate_book(attrs["book"], ValidationError)
 
         return data
 
