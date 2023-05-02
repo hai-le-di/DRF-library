@@ -1,17 +1,14 @@
-from django.core.validators import MinValueValidator
 from django.db import models
-from datetime import date
 from books.models import Book
 from user.models import User
 
 
 class Borrowing(models.Model):
     borrow_date = models.DateField(
-        validators=[MinValueValidator(limit_value=date.today)],
+        auto_now_add=True,
         help_text='The date when the book was borrowed.'
     )
     expected_return_date = models.DateField(
-        validators=[MinValueValidator(limit_value=date.today)],
         help_text='The date when the book is expected to be returned.'
     )
     actual_return_date = models.DateField(
@@ -35,5 +32,8 @@ class Borrowing(models.Model):
         if not self.pk:
             self.book.inventory -= 1
             self.book.save()
+        if self.actual_return_date and self.is_active is False:
+            self.book.inventory += 1
+            self.book.save()
+        super().save(*args, **kwargs)
 
-        super(Borrowing, self).save(*args, **kwargs)

@@ -1,5 +1,4 @@
-from datetime import datetime
-
+from django.utils import timezone
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -26,6 +25,11 @@ class BorrowingViewSet(viewsets.ModelViewSet):
         else:
             return Borrowing.objects.filter(user=user)
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({"request": self.request})
+        return context
+
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
@@ -44,9 +48,9 @@ class BorrowingViewSet(viewsets.ModelViewSet):
         if not borrowing.is_active:
             return Response({'message': 'Borrowing has already been returned.'}, status=400)
         borrowing.is_active = False
-        borrowing.actual_return_date = datetime.now()
-        borrowing.save()
-        borrowing.book.quantity += 1
-        borrowing.book.save()
+        borrowing.actual_return_date = timezone.now().date()
+        borrowing.book.inventory += 1
+        borrowing.book.save(update_fields=['inventory'])
+        borrowing.save(update_fields=['is_active', 'actual_return_date'])
         serializer = self.get_serializer(borrowing)
         return Response(serializer.data)

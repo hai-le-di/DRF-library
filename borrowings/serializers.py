@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -22,13 +24,6 @@ class BorrowingSerializer(serializers.ModelSerializer):
             'is_active',
         ]
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        representation['borrow_date'] = instance.borrow_date.strftime('%Y-%m-%d %H:%M:%S')
-        representation['expected_return_date'] = instance.expected_return_date.strftime('%Y-%m-%d %H:%M:%S')
-        representation['actual_return_date'] = instance.expected_return_date.strftime('%Y-%m-%d %H:%M:%S')
-        return representation
-
     def validate(self, attrs):
         data = super(BorrowingSerializer, self).validate(attrs)
         Book.validate_book(attrs["book"], ValidationError)
@@ -41,7 +36,7 @@ class BorrowingSerializer(serializers.ModelSerializer):
         book.save()
         borrowing = Borrowing.objects.create(
             book=book,
-            user=self.request.user,
+            user=self.context["request"].user,
             borrow_date=timezone.now(),
             expected_return_date=validated_data["expected_return_date"]
         )
@@ -50,10 +45,10 @@ class BorrowingSerializer(serializers.ModelSerializer):
 
 class BorrowingListSerializer(BorrowingSerializer):
     book = serializers.SlugRelatedField(
-        many=False, read_only=True, slug_field="name"
+        many=False, read_only=True, slug_field="title"
     )
     user = serializers.SlugRelatedField(
-        many=False, read_only=True, slug_field="title"
+        many=False, read_only=True, slug_field="email"
     )
 
 
