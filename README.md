@@ -9,7 +9,7 @@ To get a copy of this project up and running on your local machine, follow these
 1. Clone this repository to your local machine using https://github.com/hai-le-di/DRF-library.git
 2. Navigate to the project's root directory:
 ```
-cd /dfr_library
+cd DRF-library
 ```
 3. Create a virtual environment:
 ```
