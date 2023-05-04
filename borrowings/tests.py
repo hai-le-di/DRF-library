@@ -69,7 +69,7 @@ class BorrowingTests(TestCase):
 
     def test_return_borrowing(self):
         self.client.force_authenticate(user=self.user)
-        url = reverse("borrowings:return_borrowing", args=[self.borrowing.id])
+        url = reverse("borrowings:return", args=[self.borrowing.id])
         response = self.client.post(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         borrowing = Borrowing.objects.get(id=self.borrowing.id)
@@ -83,7 +83,7 @@ class BorrowingTests(TestCase):
         self.borrowing.is_active = False
         self.borrowing.actual_return_date = date.today()
         self.borrowing.save()
-        url = reverse("borrowings:return_borrowing", args=[self.borrowing.id])
+        url = reverse("borrowings:return", args=[self.borrowing.id])
         response = self.client.post(url)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 

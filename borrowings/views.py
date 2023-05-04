@@ -1,5 +1,5 @@
 from django.utils import timezone
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -59,4 +59,4 @@ class BorrowingViewSet(viewsets.ModelViewSet):
         borrowing.book.save(update_fields=["inventory"])
         borrowing.save(update_fields=["is_active", "actual_return_date"])
         serializer = self.get_serializer(borrowing)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)

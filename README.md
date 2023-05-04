@@ -44,19 +44,19 @@ password="testpassword"
 
 The API endpoints provided by this project are:
 
-| URL                            | Method | Description                           |
-| ------------------------------| ------ | ------------------------------------- |
-| /api/books/                    | GET    | Retrieve a list of all books.         |
-| /api/books/                    | POST   | Create a new book.                    |
-| /api/books/{id}/               | GET    | Retrieve a single book.               |
-| /api/books/{id}/               | PUT    | Update a single book.                 |
-| /api/books/{id}/               | DELETE | Delete a single book.                 |
-| /api/borrowings/               | GET    | Retrieve a list of all borrowings.    |
-| /api/borrowings/               | POST   | Create a new borrowing.               |
-| /api/borrowings/{id}/          | GET    | Retrieve a single borrowing.          |
-| /api/borrowings/{id}/          | PUT    | Update a single borrowing.            |
-| /api/borrowings/{id}/          | DELETE | Delete a single borrowing.            |
-| /api/borrowings/{id}/return_borrowing/ | POST | Return a borrowing.            |
+| URL                          | Method | Description                           |
+| -----------------------------| ------ | ------------------------------------- |
+| /api/books/                  | GET    | Retrieve a list of all books.         |
+| /api/books/                  | POST   | Create a new book.                    |
+| /api/books/{id}/             | GET    | Retrieve a single book.               |
+| /api/books/{id}/             | PUT    | Update a single book.                 |
+| /api/books/{id}/             | DELETE | Delete a single book.                 |
+| /api/borrowings/             | GET    | Retrieve a list of all borrowings.    |
+| /api/borrowings/             | POST   | Create a new borrowing.               |
+| /api/borrowings/{id}/        | GET    | Retrieve a single borrowing.          |
+| /api/borrowings/{id}/        | PUT    | Update a single borrowing.            |
+| /api/borrowings/{id}/        | DELETE | Delete a single borrowing.            |
+| /api/borrowings/{id}/return/ | POST | Return a borrowing.            |
 
 ### Running the Tests
 
