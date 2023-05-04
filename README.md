@@ -28,15 +28,17 @@ pip install -r requirements.txt
 ```
 python manage.py migrate
 ```
-8. Create a superuser account:
-```
-python manage.py createsuperuser
-```
-9. Start the development server:
+8. Start the development server:
 ```
 python manage.py runserver
 ```
-10. Open your web browser and navigate to http://localhost:8000/admin to access the Django admin site. Log in with your superuser account credentials.
+9. Open your web browser and navigate to http://localhost:8000/admin to access the Django admin site. Log in with your superuser account credentials.
+
+## Test creds
+```
+email="test@user.test", 
+password="testpassword"
+```
 
 ## API Endpoints
 
