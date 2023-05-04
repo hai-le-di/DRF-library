@@ -16,6 +16,14 @@ class Book(models.Model):
     inventory = models.PositiveIntegerField()
     daily_fee = models.DecimalField(max_digits=5, decimal_places=4)
 
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+                check=models.Q(inventory__gte=0),
+                name='inventory_non_negative'
+            ),
+        ]
+
     def __str__(self):
         return self.title
 

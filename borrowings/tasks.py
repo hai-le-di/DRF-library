@@ -1,12 +1,12 @@
 import os
+
+from django.conf import settings
+
 from borrowings.celery import app
 from datetime import timedelta
 from django.utils import timezone
 from .models import Borrowing
 from telegram_helper import bot
-from dotenv import load_dotenv
-
-load_dotenv()
 
 
 @app.task
@@ -20,7 +20,7 @@ def send_overdue_notifications():
         is_active=True,
     )
 
-    chat_id = os.environ["CHAT_ID"]
+    chat_id = settings.CHAT_ID
 
     # Send a notification for each overdue borrowing
     for borrowing in overdue_borrowings:

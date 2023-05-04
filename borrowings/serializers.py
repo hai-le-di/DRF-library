@@ -21,12 +21,6 @@ class BorrowingSerializer(serializers.ModelSerializer):
             "is_active",
         ]
 
-    def validate(self, attrs):
-        data = super(BorrowingSerializer, self).validate(attrs)
-        Book.validate_book(attrs["book"], ValidationError)
-
-        return data
-
     def create(self, validated_data):
         book = validated_data["book"]
         book.inventory -= 1

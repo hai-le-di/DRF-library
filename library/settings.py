@@ -155,3 +155,6 @@ CELERY_BEAT_SCHEDULE = {
     },
 }
 
+CHAT_ID = os.environ.get("CHAT_ID", None)
+
+
