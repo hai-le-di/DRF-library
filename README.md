@@ -36,7 +36,7 @@ python manage.py runserver
 
 ## Test creds
 ```
-email="test@user.test", 
+email="testuser@example.com"
 password="testpassword"
 ```
 

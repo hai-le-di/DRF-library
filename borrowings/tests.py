@@ -1,4 +1,6 @@
 from datetime import date, timedelta, timezone
+from unittest import mock
+
 from django.utils import timezone
 from django.test import TestCase
 from django.urls import reverse
@@ -13,10 +15,10 @@ class BorrowingTests(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = User.objects.create_user(
-            email="testuser@example.com", password="testpass"
+            email="user@example.com", password="testpass"
         )
         self.staff_user = User.objects.create_user(
-            email="teststaff@example.com", password="testpass", is_staff=True
+            email="staff@example.com", password="testpass", is_staff=True
         )
         self.book = Book.objects.create(
             title="Test Book",
@@ -47,7 +49,8 @@ class BorrowingTests(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_create_borrowing(self):
+    @mock.patch("telegram.Bot.send_message")
+    def test_create_borrowing(self, mock_send_message):
         self.client.force_authenticate(user=self.user)
         data = {
             "expected_return_date": timezone.now().date(),
@@ -57,6 +60,12 @@ class BorrowingTests(TestCase):
         url = reverse("borrowings:borrowings-list")
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        # Ensure the borrowing was created successfully
+        borrowing = Borrowing.objects.last()
+        self.assertEqual(borrowing.book, self.book)
+        self.assertEqual(borrowing.user, self.user)
+        self.assertEqual(borrowing.expected_return_date, data["expected_return_date"])
 
     def test_return_borrowing(self):
         self.client.force_authenticate(user=self.user)

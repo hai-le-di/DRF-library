@@ -4,14 +4,14 @@ from user.models import User
 
 def create_test_user(apps, schema_editor):
     test_user = User.objects.create_user(
-        email="test@user.test",
+        email="testuser@example.com",
         password="testpassword"
     )
 
 
 def reverse_func(apps, schema_editor):
     User = apps.get_model("user", "User")
-    User.objects.filter(email="test@user.test").delete()
+    User.objects.filter(email="testuser@example.com").delete()
 
 
 class Migration(migrations.Migration):

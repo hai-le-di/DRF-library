@@ -1,3 +1,5 @@
+from unittest import mock
+
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
@@ -14,6 +16,22 @@ class BookTests(TestCase):
             email="admin@test.com", password="testpass123"
         )
         self.client.force_authenticate(user=self.admin_user)
+
+    @mock.patch('books.views.BookViewSet.get_queryset')
+    def test_list_books(self, mock_get_queryset):
+        mock_book = Book(
+            title="The Catcher in the Rye",
+            author="J.D. Salinger",
+            cover="hard",
+            inventory=10,
+            daily_fee=2.99,
+        )
+        mock_get_queryset.return_value = [mock_book]
+        url = reverse("books:book-list")
+        response = self.client.get(url, format="json")
+        serializer = BookSerializer([mock_book], many=True)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, serializer.data)
 
     def test_create_book(self):
         url = reverse("books:book-list")
