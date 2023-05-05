@@ -46,7 +46,8 @@ class BorrowingViewSet(viewsets.ModelViewSet):
 
         return BorrowingSerializer
 
-    @action(detail=True, methods=["post"])
+    @action(detail=True, methods=["post"],
+            url_path="return")
     def return_borrowing(self, request, pk=None):
         borrowing = self.get_object()
         if not borrowing.is_active:

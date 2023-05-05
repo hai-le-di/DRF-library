@@ -4,11 +4,10 @@ from unittest import mock
 from django.utils import timezone
 from django.test import TestCase
 from django.urls import reverse
-from rest_framework.test import APIClient, APIRequestFactory, force_authenticate
+from rest_framework.test import APIClient
 from rest_framework import status
 from books.models import Book
 from borrowings.models import Borrowing
-from borrowings.views import BorrowingViewSet
 from user.models import User
 
 

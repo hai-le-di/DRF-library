@@ -8,11 +8,6 @@ router.register("borrowings", BorrowingViewSet, basename="borrowings")
 
 urlpatterns = [
     path("", include(router.urls)),
-    path(
-        "borrowings/<int:pk>/return/",
-        BorrowingViewSet.as_view({"post": "return_borrowing"}),
-        name="return"
-    )
 ]
 
 
